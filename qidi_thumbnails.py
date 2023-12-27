@@ -1,5 +1,5 @@
 # Copyright (c) 2023 Molodos
-# The ElegooNeptuneThumbnails plugin is released under the terms of the AGPLv3 or higher.
+# The QidiThumbnails plugin is released under the terms of the AGPLv3 or higher.
 
 import argparse
 import base64
@@ -17,7 +17,7 @@ import lib_col_pic
 
 class QidiThumbnails:
     """
-    ElegooNeptuneThumbnails post processing script
+    QidiThumbnails post processing script
     """
 
     def __init__(self):
@@ -47,7 +47,7 @@ class QidiThumbnails:
         base64_thumbnail: str = ""
         with open(self._gcode, "r", encoding="utf8") as file:
             for line in file.read().splitlines():
-                if not found and line.startswith("; thumbnail begin 300x300"):
+                if not found and line.startswith("; thumbnail begin "):
                     found = True
                 elif found and line == "; thumbnail end":
                     return base64_thumbnail
@@ -56,7 +56,7 @@ class QidiThumbnails:
 
         # If not found, raise exception
         raise Exception(
-            "Correct size thumbnail is not present: Make sure, that your slicer generates a thumbnail with size 300x300")
+            "Correct size thumbnail is not present: Make sure, that your slicer generates a thumbnail.")
 
     def _get_q_image_thumbnail(self) -> QImage:
         """
@@ -77,7 +77,7 @@ class QidiThumbnails:
         # Parse to g-code prefix
         gcode_prefix: str = ""
 
-        # Generate thumbs
+        # Generate thumbs. Sizes taken from default Qidi Slicer thumbnail configuration
         gcode_prefix += self._parse_thumbnail_new(self._thumbnail, 380, 380, "gimage")
         gcode_prefix += self._parse_thumbnail_new(self._thumbnail, 210, 210, "simage")
 
