@@ -1,95 +1,55 @@
-# Elegoo Neptune Thumbnails Post Processing Script For PrusaSlicer
+# Qidi Thumbnails Post Processing Script For Orca Slicer
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
-## Support This Project
-
-If you like this post processing script, consider supporting me :)
-
-[![Buy Me A Coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=molodos&button_colour=5F7FFF&font_colour=ffffff&font_family=Comic&outline_colour=000000&coffee_colour=FFDD00&id=5)](https://www.buymeacoffee.com/molodos)
-
 ## General Info
 
-> **Note:** This is a lite version of
-> the [ElegooNeptuneThumbnails plugin for Cura 5.X](https://github.com/Molodos/ElegooNeptuneThumbnails). For all
-> features,
-> use Cura :)
+This is a fork of from [ElegooNeptuneThumbnails-Prusa](https://github.com/Molodos/ElegooNeptuneThumbnails-Prusa). 
+That developer took the time to reverse engineer the library everyone uses for this operation. They did the hard work. All I did was modify their work for Qidi printers. 
+I looked at some Qidi source code for their thumbnail generation, modified a few things, and went full send. I guess also thank Qidi for releasing their software source.
 
-PrusaSlicer post processing script for adding gcode thumbnail images for Elegoo Neptune printers. The following models
-are supported (for other models, see [FAQ](#faq)):
+Orca Slicer post processing script for adding gcode thumbnail images for Qidi printers. The following models
+are supported:
 
-- Elegoo Neptune 4
-- Elegoo Neptune 4 Pro
-- Elegoo Neptune 4 Plus
-- Elegoo Neptune 4 Max
-- Elegoo Neptune 3 Pro
-- Elegoo Neptune 3 Plus
-- Elegoo Neptune 3 Max
-- Elegoo Neptune 2
-- Elegoo Neptune 2S
-- Elegoo Neptune 2D
-- Elegoo Neptune X
-
-> **Note:** If you have some idea on how to improve the post processing script or found a bug, feel free to create
-> a [GitHub issue](https://github.com/Molodos/ElegooNeptuneThumbnails-Prusa/issues/new/choose) for that
-
-<p float="left">
-   <img src="readme_images/neptune_4_preview.jpg" width="300">
-   <img src="readme_images/neptune_4_view.jpg" width="300">
-</p>
+- Qidi XSmart 3
+- Qidi XPlus 3
+- Qidi XMax 3
 
 ## Installation
 
-1) Download the post processing script binary for Windows
-   from [GitHub](https://github.com/Molodos/ElegooNeptuneThumbnails-Prusa/releases/latest) if you are using another
-   operating system, you have to compile the script yourself as described in [Packaging Guide](#packaging-guide)
-2) Place the binary somewhere on your system and remember the path (
-   e.g. `C:\Users\Michael\ElegooNeptuneThumbnails-Prusa.exe`)
-3) Set the thumbnail generation in PrusaSlicer to 600x600
-   PNG <img src="readme_images/prusaslicer_set_thumbnail.png" width="600">
-4) Configure the path to the post processing script binary in
-   PrusaSlicer <img src="readme_images/prusaslicer_add_script.png" width="600">
+1) You have to compile the script yourself as described in [Packaging Guide](#packaging-guide). I am not pre-building anything...probably.
+2) Place the binary somewhere on your system and remember the path (`/Users/sparky/sandbox/QidiThumbnails-OrcaSlicer/dist/QidiThumbnails-OrcaSlicer`)
+3) Set the thumbnail generation in Orca Slicer to 300x300 (should be the default). Click on the little pencil icon to the right of the printer drop-down if you need to change it.
+4) Configure the path to the post processing script binary. Under the Process section, click Others and scroll down to Post-processing Scripts. Add the full path
+   to your executable. Orca will automatically send the path to the gcode it generates so you only need the path to the executable.
 5) If it isn't working, check the [FAQ](#faq)
 
 ## FAQ
 
-### Is there a Cura version of this plugin?
+### Why?
 
-Yes, check out the [ElegooNeptuneThumbnails plugin for Cura 5.X](https://github.com/Molodos/ElegooNeptuneThumbnails),
-which is the extended version of this pos processing script.
+I prefer to use Orca Slicer over Qidi Slicer but the base64 PNG that Orca puts in gcode does not display on the printer front panel
 
-### I did not use the official Neptune printer preset in PrusaSliceer, what to do?
+### What printers have you tested on?
 
-The script cannot auto-detect your printer when doing so. To manually set the printer model, use the
-parameter `--printer=<printer_model>` after the path of the processing script in the PrusaSlicer settings. It should
-look like `C:\Users\Michael\ElegooNeptuneThumbnails-Prusa.exe --printer=NEPTUNE4PRO`. Allowed values are the following:
+This has only been tested on a Qidi XMax 3 with a binary built on a Mac M2. You are on your own for Python support.
 
-NEPTUNE4, NEPTUNE4PRO, NEPTUNE4PLUS, NEPTUNE4MAX, NEPTUNE3PRO, NEPTUNE3PLUS, NEPTUNE3MAX, NEPTUNE2, NEPTUNE2S, NEPTUNE2D and NEPTUNEX 
+### Do you like Python?
 
-### Does the "normal" Neptune 3 support this plugin?
-
-The "normal" Neptune 3 doesn't support displaying thumbnails, I have talked with Elegoo as there were many people asking
-for it.
-
-### Thumbnails are not generated. What to do?
-
-Make sure, that you have followed the installation steps correctly.
-
-### Why do thumbnails not change when printing another gcode file?
-
-There seems to be a bug in older printer firmware versions which causes the thumbnail to not update if you start a print
-right after the last one ended. Restarting the printer in between prints seems to fix that. If this is the case for you,
-check your printer for firmware updates, which might fix the bug.
-
-### Why do I get errors and the thumbnail does not work on MacOS using an M-Series chip?
-
-Unfortunately I am dependent of the official Elegoo Cura binaries and as there are no binaries for the MacOS M series
-chips, I am not able to provide support for those.
+No. Python support is better coming from Google than myself. I am an SDE but I do not have much need for Python in my daily life at this time.
+My brain can only fit immediately relevant knowledge and completely useless knowledge.
 
 ## Packaging Guide
 
 ### For Macs with M-series chips
 If you have an arm64 mac, you will need to build an executable inside of a x86_64 python environment. The easiest way is with [miniconda](https://formulae.brew.sh/cask/miniconda):
+
+After installing miniconda you need to init your shell:
+```
+conda init "$(basename "${SHELL}")"
+```
+
+Setup the env:
 ```
 conda create -p ./my_x86_env -y
 conda activate ./my_x86_env
@@ -105,15 +65,15 @@ Then, follow the steps for other systems.
    
    Windows:
    ```shell
-   pyinstaller --onefile --name="ElegooNeptuneThumbnails-Prusa" elegoo_neptune_thumbnails.py
+   pyinstaller --onefile --name="QidiThumbnails-OrcaSlicer" qidi_thumbnails.py
    ```
    Mac/Linux:
       ```shell
-   pyinstaller --onefile --name="ElegooNeptuneThumbnails-Prusa" elegoo_neptune_thumbnails.py
+   pyinstaller --onefile --name="QidiThumbnails-OrcaSlicer" qidi_thumbnails.py
    ```
 3) Binary is in `dist` folder
 
 ## License
 
 This repository uses code snippets and image encoding binaries from Elegoo Cura MKS Plugin and is therefore released
-under the **AGPL v3** license.
+under the **AGPL v3** license. Shamelessly forked from [ElegooNeptuneThumbnails-Prusa](https://github.com/Molodos/ElegooNeptuneThumbnails-Prusa)
